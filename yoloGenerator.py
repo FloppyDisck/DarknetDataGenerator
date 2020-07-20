@@ -1,13 +1,15 @@
 
 
-def yolov3_tiny(classes):
+def yolov3_tiny(classes, width=608, height=608):
     """
     Create a yolov3-tiny configuration file
+    :param width: Input image width
+    :param height: Input image height
     :param classes: The number of classes in your config
     :return: A text configuration
     """
     return (
-            net(classes) +
+            net(classes, width, height) +
             convolutional(1, 16, 3, "leaky") +
             maxpool(2, 2) +
             convolutional(1, 32, 3, "leaky") +
@@ -35,7 +37,7 @@ def yolov3_tiny(classes):
     )
 
 
-def net(class_qty):
+def net(class_qty, width, height):
     # max_batches cannot be lower than 6000
     max_batches = class_qty * 2000 if class_qty >= 3 else 6000
 
@@ -43,8 +45,8 @@ def net(class_qty):
         "[net]\n"
         "batch=64\n"
         "subdivisions=16\n"
-        "width=416\n"
-        "height=416\n"
+        f"width={width}\n"
+        f"height={height}\n"
         "channels=3\n"
         "momentum=0.9\n"
         "decay=0.0005\n"

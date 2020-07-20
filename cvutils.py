@@ -125,7 +125,7 @@ def combine(fore_image, back_image, x_offset, y_offset):
 
     # Grab the region of interest (ROI) in the background
     rows, cols, channels = fore_image.shape
-    roi = background_img[x_offset:rows + x_offset, y_offset:cols + y_offset]
+    roi = background_img[y_offset:rows + y_offset, x_offset:cols + x_offset]
 
     # Mask the foreground image
     img2gray = cv2.cvtColor(fore_image, cv2.COLOR_BGR2GRAY)
@@ -142,6 +142,17 @@ def combine(fore_image, back_image, x_offset, y_offset):
     dst = cv2.add(back_bg, fore_fg)
 
     # Replace ROI in original background image
-    background_img[x_offset:rows + x_offset, y_offset:cols + y_offset] = dst
+    background_img[y_offset:rows + y_offset, x_offset:cols + x_offset] = dst
 
     return background_img
+
+
+def create_blank(width, height, rgb=(0, 0, 0)):
+    # Create blank image
+    image = np.zeros((height, width, 3), np.uint8)
+    # Convert to BGR
+    color = tuple(reversed(rgb))
+    # Fill image with color
+    image[:] = color
+
+    return image
